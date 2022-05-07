@@ -35,6 +35,11 @@ client.on('messageCreate', (msg) => {
             axios(axiosOptions)
             .then(response => {
                 let stats = ''
+                let convertToSol = 0.000000001
+
+                for (let property in response.data) {
+                    response.data[property] = parseFloat(response.data[property] * convertToSol).toFixed(2)
+                }
 
                 stats = stats + `\nFloor Price: ${response.data['floorPrice']}`;
                 stats = stats + `\nListed Count: ${response.data['listedCount']}`;
@@ -51,8 +56,6 @@ client.on('messageCreate', (msg) => {
         }
     }
         
-        
-
 });
 
 client.login(process.env.DISCORD_TOKEN)
