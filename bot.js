@@ -3,16 +3,15 @@ var http = require('http');
 http.createServer(function (req, res) {
     var logger = require('winston');
     require('dotenv').config();
-    var logger = require('winston');
-    const fetch = require("node-fetch")
-
     const { Client, Intents, MessageEmbed } = require('discord.js');
 
     const client = new Client(
         { intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] }
     );
     const axios = require('axios')
-        
+    
+    logger.info(`Hello`)
+
 
     client.on('ready', () => {
         logger.info(`Logged in as ${client.user.tag}`)
@@ -61,7 +60,4 @@ http.createServer(function (req, res) {
     client.login(process.env.DISCORD_TOKEN)
 
 
-    res.setHeader("Content-Type", "application/json");
-    res.writeHead(200);
-    res.end(`{"message": "This endpoint is for a Discord Bot"}`);
 }).listen(process.env.PORT || 8080);
