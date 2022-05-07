@@ -37,14 +37,18 @@ client.on('messageCreate', (msg) => {
                 let stats = ''
                 let convertToSol = 0.000000001
 
-                for (let property in response.data) {
-                    response.data[property] = parseFloat(response.data[property] * convertToSol).toFixed(2)
+                for ( let property in response.data ) {
+                    let temp = response.data[property]
+                    if ( !isNaN(temp) ) 
+                        if (temp > 100000) // which is not possible since listings cannot be greater than 100000 and fp cannot be lower than 0.0001  
+                            response.data[property] = parseFloat(temp * convertToSol).toFixed(2)
+                    
                 }
 
-                stats = stats + `\nFloor Price: ${response.data['floorPrice']}`;
-                stats = stats + `\nListed Count: ${response.data['listedCount']}`;
-                stats = stats + `\nAverage Price: ${response.data['avgPrice24hr']}`;
-                stats = stats + `\nTotal Volume: ${response.data['volumeAll']}`;
+                stats = stats + `\nFloor Price: ${response.data['floorPrice']}`
+                stats = stats + `\nListed Count: ${response.data['listedCount']}`
+                stats = stats + `\nAverage Price: ${response.data['avgPrice24hr']}`
+                stats = stats + `\nTotal Volume: ${response.data['volumeAll']}`
             
                 let embed = new MessageEmbed()
                     .setTitle(`Magic Eden: ${name}`)
