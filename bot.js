@@ -36,16 +36,16 @@ client.on('messageCreate', (msg) => {
 
             axios(axiosOptions)
             .then(response => {
-                let rs = ''
+                let stats = ''
 
-                rs = rs + `\nFloor Price: ${response.data['floorPrice']}`;
-                rs = rs + `\nListed Count: ${response.data['listedCount']}`;
-                rs = rs + `\nAverage Price: ${response.data['avgPrice24hr']}`;
-                rs = rs + `\nTotal Volume: ${response.data['volumeAll']}`;
+                stats = stats + `\nFloor Price: ${response.data['floorPrice']}`;
+                stats = stats + `\nListed Count: ${response.data['listedCount']}`;
+                stats = stats + `\nAverage Price: ${response.data['avgPrice24hr']}`;
+                stats = stats + `\nTotal Volume: ${response.data['volumeAll']}`;
             
                 let embed = new MessageEmbed()
                     .setTitle(`Magic Eden: ${name}`)
-                    .setDescription(rs)
+                    .setDescription(stats)
                     .setURL(`https://magiceden.io/marketplace/${name}`)
                 msg.channel.send({ embeds: [embed] });
 
@@ -59,9 +59,8 @@ client.on('messageCreate', (msg) => {
 
 client.login(process.env.DISCORD_TOKEN)
 
-// http.createServer(function (req, res) {
-
-    
-
-    
-// }).listen(process.env.PORT || 8080);
+http.createServer(function (req, res) {
+    res.setHeader("Content-Type", "application/json");
+    res.writeHead(200);
+    res.end(`{"message": "This endpoint is for a Discord Bot"}`);
+}).listen(process.env.PORT || 8080);
