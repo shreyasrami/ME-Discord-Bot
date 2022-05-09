@@ -85,8 +85,8 @@ for (const file of eventFiles) {
 
 client.login(process.env.DISCORD_TOKEN)
 
-// http.createServer(function (req, res) {
-//     res.setHeader("Content-Type", "application/json");
-//     res.writeHead(200);
-//     res.end(`{"message": "This endpoint is for a Discord Bot"}`);
-// }).listen(process.env.PORT || 8080);
+http.createServer(function (req, res) {
+    res.setHeader("Content-Type", "application/json");
+    res.writeHead(200);
+    res.end(`{"message": "This endpoint is for a Discord Bot"}`);
+}).listen(process.env.PORT || 8080);
