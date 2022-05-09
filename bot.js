@@ -10,7 +10,6 @@ const client = new Client(
     { intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] }
 );
 
-
 // Dynamic commands
 
 client.commands = new Collection();
@@ -35,7 +34,6 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
-
 
 // client.on('messageCreate', (msg) => {
 //     let args = msg.content.split(' ')
@@ -85,8 +83,8 @@ for (const file of eventFiles) {
 
 client.login(process.env.DISCORD_TOKEN)
 
-http.createServer(function (req, res) {
-    res.setHeader("Content-Type", "application/json");
-    res.writeHead(200);
-    res.end(`{"message": "This endpoint is for a Discord Bot"}`);
-}).listen(process.env.PORT || 8080);
+// http.createServer(function (req, res) {
+//     res.setHeader("Content-Type", "application/json");
+//     res.writeHead(200);
+//     res.end(`{"message": "This endpoint is for a Discord Bot"}`);
+// }).listen(process.env.PORT || 8080);
