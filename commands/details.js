@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageActionRow, MessageEmbed, MessageSelectMenu } = require('discord.js');
+const { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageButton } = require('discord.js');
 const axios = require('axios');
 const Projects = require('../db-schema');
 
@@ -20,7 +20,7 @@ module.exports = {
 					options.push({'label': project, 'value': project})
 				
 				
-				const row = new MessageActionRow()
+				const row1 = new MessageActionRow()
 				.addComponents(
 					new MessageSelectMenu()
 						.setCustomId('select')
@@ -28,6 +28,13 @@ module.exports = {
 						.setMinValues(1)
 						.addOptions(options),
 				);
+				const row2 = new MessageActionRow()
+					.addComponents(
+						new MessageButton()
+							.setCustomId('all')
+							.setLabel('All')
+							.setStyle('SUCCESS'),
+					);
 
 				const embed = new MessageEmbed()
 					.setColor('#0099ff')
@@ -36,7 +43,7 @@ module.exports = {
 					.setURL(`https://magiceden.io/marketplace/`)
 					
 				
-				await interaction.reply({ content: 'NFT Details', ephemeral: true, embeds: [embed], components: [row] });
+				await interaction.reply({ content: 'NFT Details', ephemeral: true, embeds: [embed], components: [row1,row2] });
 
 
 			} catch (err) {

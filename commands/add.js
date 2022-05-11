@@ -6,13 +6,13 @@ module.exports = {
 		.setName('add')
 		.setDescription('Add an NFT collection to My Collections')
         .addStringOption(option =>
-            option.setName('add_nft')
+            option.setName('nft')
                 .setDescription('Name of the NFT collection to be added')
                 .setRequired(true)),
                 
 	async execute(interaction) {
         const user = interaction.user.tag
-        const new_nft = interaction.options.getString('add_nft')
+        const new_nft = interaction.options.getString('nft')
         const userExist = await Projects.findOne({ user });
     
         if (userExist) {

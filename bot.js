@@ -1,5 +1,4 @@
 var http = require('http');
-var logger = require('winston');
 const fs = require('node:fs');
 
 require('dotenv').config();

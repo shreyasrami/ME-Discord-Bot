@@ -6,13 +6,16 @@ module.exports = {
 		.setName('remove')
 		.setDescription('Remove an NFT collection from My Collections')
 		.addStringOption(option =>
-            option.setName('remove_nft')
+            option.setName('nft')
                 .setDescription('Name of the NFT collection to be removed')
-                .setRequired(true)),
+                .setRequired(true)
+				.setAutocomplete(true)),
 				
 	async execute(interaction) {
 		const user = interaction.user.tag
-        const remove_nft = interaction.options.getString('remove_nft')
+		let all_projects = await Projects.findOne({ user })
+		all_projects = all_projects.user_projects
+        const remove_nft = interaction.options.getString('nft')
         const userExist = await Projects.findOne({ user });
     
         if (userExist) {

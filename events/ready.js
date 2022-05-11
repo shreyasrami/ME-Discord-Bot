@@ -1,4 +1,3 @@
-var logger = require('winston');
 const mongoose = require('mongoose')
 
 module.exports = {
@@ -11,6 +10,6 @@ module.exports = {
 				keepAlive:true
 			}
 		)
-        logger.info(`Logged in as ${client.user.tag}`);
+        console.log(`Logged in as ${client.user.tag}`);
 	},
 };
