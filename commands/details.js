@@ -38,11 +38,11 @@ module.exports = {
 				const embed = new MessageEmbed()
 					.setColor('#0099ff')
 					.setTitle(`Magic Eden Stats`)
-					.setDescription(`Select an option to fetch the stats of you NFT collections from Magic Eden`)
+					.setDescription(`Select an option to fetch the stats of your NFT collections from Magic Eden`)
 					.setURL(`https://magiceden.io/marketplace/`)
 					
 				
-				await interaction.reply({ content: 'NFT Details', ephemeral: true, embeds: [embed], components: [row1,row2] });
+				await interaction.reply({ ephemeral: true, embeds: [embed], components: [row1,row2] });
 
 
 			} catch (err) {
@@ -51,8 +51,6 @@ module.exports = {
 		}
 		else
 			await interaction.reply(`There are no NFTs added for ${user} yet, Please add new NFTs to get the details`);
-
-
-                
+          
 	},
 };
