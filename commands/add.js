@@ -8,7 +8,8 @@ module.exports = {
         .addStringOption(option =>
             option.setName('nft')
                 .setDescription('Name of the NFT collection to be added')
-                .setRequired(true)),
+                .setRequired(true)
+                .setAutocomplete(true)),
                 
 	async execute(interaction) {
         const user = interaction.user.tag
@@ -26,7 +27,7 @@ module.exports = {
             else
         		await interaction.reply(`${new_nft} already exists in My Collections for ${user}`)
         } else {
-            const projects = await Projects.create({
+            await Projects.create({
                 user,
                 user_projects: [new_nft]
             });

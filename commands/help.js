@@ -10,7 +10,7 @@ module.exports = {
                 
 	async execute(interaction) {
 
-        let commands = `/help - Shows all commands.\n/server - Shows server information.\n/user - Shows user information.\n/add nft: foo - Adds nft named foo to My Collections.\n/remove nft: foo - Removes nft named foo from My Collections.\n/details - Shows a select menu with all the nfts in My Collections to get the details from Magic Eden.`
+        let commands = '`/help` - Shows all commands.\n\n`/server` - Shows server information.\n\n`/user` - Shows user information.\n\n`/add nft: foo` - Adds nft named foo to My Collections.\n\n`/remove nft: foo` - Removes nft named foo from My Collections.\n\n`/details` - Shows a select menu with all the nfts in My Collections to get the details from Magic Eden.'
         const embed = new MessageEmbed()
                         .setColor('#0099ff')
                         .setTitle(`Commands`)

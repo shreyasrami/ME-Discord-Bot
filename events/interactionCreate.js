@@ -113,14 +113,19 @@ module.exports = {
 		}
 
 		if (interaction.isAutocomplete()) {
-			const user = interaction.user.tag
-			let all_projects = await Projects.findOne({ user })
-			all_projects = all_projects.user_projects
 			let choices = []
-			for (const project of all_projects) 
-				choices.push({'name': project, 'value': project})
-			
+
+			if (interaction.commandName === "remove") {
+				const user = interaction.user.tag
+				let all_projects = await Projects.findOne({ user })
+				all_projects = all_projects.user_projects
+				for (const project of all_projects) 
+					choices.push({'name': project, 'value': project})
+				
+			}
+
 			interaction.respond(choices);
+
 		}
 
         

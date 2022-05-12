@@ -19,7 +19,6 @@ module.exports = {
 				for (const project of projects) 
 					options.push({'label': project, 'value': project})
 				
-				
 				const row1 = new MessageActionRow()
 				.addComponents(
 					new MessageSelectMenu()
