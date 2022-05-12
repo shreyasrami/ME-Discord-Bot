@@ -8,8 +8,7 @@ module.exports = {
         .addStringOption(option =>
             option.setName('nft')
                 .setDescription('Name of the NFT collection to be added')
-                .setRequired(true)
-                .setAutocomplete(true)),
+                .setRequired(true)),
                 
 	async execute(interaction) {
         const user = interaction.user.tag
