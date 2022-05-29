@@ -59,7 +59,7 @@ module.exports = {
 						.setColor('#0099ff')
 						.setTitle(`${projects[index]}`)
 						.setDescription(response)
-						.setURL(`https://magiceden.io/marketplace/project_tenjin`)
+						.setURL(`https://magiceden.io/marketplace/${projects[index]}`)
 					await interaction.channel.send({ ephemeral: true, embeds: [embed], components: [] });
 
 				}
