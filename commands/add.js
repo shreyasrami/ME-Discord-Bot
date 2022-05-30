@@ -4,10 +4,10 @@ const Wallets = require('../db-schema');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('add')
-		.setDescription('Add an NFT collection to My Collections')
+		.setDescription('Add a new Wallet Address')
         .addStringOption(option =>
             option.setName('address')
-                .setDescription('Name of the NFT collection to be added')
+                .setDescription('Wallet Address to be added')
                 .setRequired(true)),
                 
 	async execute(interaction) {
