@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
-const projectSchema = mongoose.Schema(
+const walletSchema = mongoose.Schema(
   {
     user: {
       type: String,
       required: true,
     },
-    user_projects: {
+    wallet_addresses: {
         type: Array,
         required: true,
         default: []
@@ -15,4 +15,4 @@ const projectSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Projects", projectSchema);
+module.exports = mongoose.model("Wallets", walletSchema);

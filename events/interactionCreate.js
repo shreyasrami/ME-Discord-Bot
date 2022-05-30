@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Projects = require('../db-schema');
+const Wallets = require('../db-schema');
 const { MessageActionRow, MessageEmbed, MessageSelectMenu } = require('discord.js');
 
 module.exports = {
@@ -70,13 +70,23 @@ module.exports = {
 		if (interaction.isButton()) {
 			await interaction.deferUpdate()
 			const user = interaction.user.tag
-			let all_projects = await Projects.findOne({ user })
-			all_projects = all_projects.user_projects
-			let urls = all_projects.map(project => `https://api-mainnet.magiceden.dev/v2/collections/${project}/stats`)
+			let all_wallets = await Wallets.findOne({ user })
+			all_wallets = all_wallets.wallet_addresses
+			let all_projects = []
 			let responses = []
 
-			for (let url of urls) 
-				responses.push(await axios.get(url)) 
+			for (const wallet of all_wallets) {
+				const collections = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${wallet}/tokens?offset=0&limit=100`)
+				for (const collection of collections.data) 
+					all_projects.push(collection.collection)	
+			}
+			
+			all_projects = all_projects.filter((v, i, a) => a.indexOf(v) === i)
+
+			for(const project of all_projects) 
+				responses.push(await axios.get(`https://api-mainnet.magiceden.dev/v2/collections/${project}/stats`))
+
+			
 			
 			let convertToSol = 0.000000001
 
@@ -117,10 +127,10 @@ module.exports = {
 
 			if (interaction.commandName === "remove") {
 				const user = interaction.user.tag
-				let all_projects = await Projects.findOne({ user })
-				all_projects = all_projects.user_projects
-				for (const project of all_projects) 
-					choices.push({'name': project, 'value': project})
+				let all_wallets = await Wallets.findOne({ user })
+				all_wallets = all_wallets.wallet_addresses
+				for (const wallet of all_wallets) 
+					choices.push({'name': wallet, 'value': wallet})
 				
 			}
 

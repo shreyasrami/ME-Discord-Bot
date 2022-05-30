@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageButton } = require('discord.js');
 const axios = require('axios');
-const Projects = require('../db-schema');
+const Wallets = require('../db-schema');
 
 
 module.exports = {
@@ -10,14 +10,18 @@ module.exports = {
 		.setDescription('Gives options for NFT details'),
 	async execute(interaction) {
 		const user = interaction.user.tag
-        const userExist = await Projects.findOne({ user });
-		if (userExist && userExist.user_projects.length > 0) {
+        const userExist = await Wallets.findOne({ user });
+		if (userExist && userExist.wallet_addresses.length > 0) {
 			
 			try {
-				let projects = userExist.user_projects
 				let options = []
-				for (const project of projects) 
-					options.push({'label': project, 'value': project})
+				let addresses = userExist.wallet_addresses
+				for (const address of addresses) {
+					const collections = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${address}/tokens?offset=0&limit=100`)
+					for (const collection of collections.data) 
+						options.push({'label': collection.collectionName, 'value': collection.collection})
+				}
+				options = [...new Map(options.map(item => [item['value'], item])).values()]
 				
 				const row1 = new MessageActionRow()
 				.addComponents(
@@ -50,7 +54,7 @@ module.exports = {
 			}
 		}
 		else
-			await interaction.reply(`There are no NFTs added for ${user} yet, Please add new NFTs to get the details`);
+			await interaction.reply(`There are no wallets added for ${user} yet, Please add new wallet address to get the details`);
           
 	},
 };
