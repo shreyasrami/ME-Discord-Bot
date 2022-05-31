@@ -56,7 +56,7 @@ module.exports = {
 
 				let all_details = ``
 				for (let [index,response] of modifiedResponses.entries()) 
-					all_details = all_details + `\n\n[**${projects[index]}**](https://magiceden.io/marketplace/${projects[index]})\n${response}\n\n`
+					all_details = all_details + `\n**[${projects[index]}](https://magiceden.io/marketplace/${projects[index]})**\n${response}\n\n\n`
 				
 
 				let embed = new MessageEmbed()
@@ -116,7 +116,7 @@ module.exports = {
 
 			let all_details = ``
 			for (let [index,response] of modifiedResponses.entries()) 
-				all_details = all_details + `\n\n[**${all_projects[index]}**](https://magiceden.io/marketplace/${all_projects[index]})\n${response}\n\n`
+				all_details = all_details + `\n**[${all_projects[index]}](https://magiceden.io/marketplace/${all_projects[index]})**\n${response}\n\n\n`
 			
 
 			let embed = new MessageEmbed()
