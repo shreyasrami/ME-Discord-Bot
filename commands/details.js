@@ -9,7 +9,7 @@ module.exports = {
 		.setName('details')
 		.setDescription('Gives options for NFT details'),
 	async execute(interaction) {
-		await interaction.deferReply();
+		await interaction.deferReply({ ephemeral: true });
 		const user = interaction.user.tag
         const userExist = await Wallets.findOne({ user });
 		if (userExist && userExist.wallet_addresses.length > 0) {
@@ -18,8 +18,10 @@ module.exports = {
 				let addresses = userExist.wallet_addresses
 				for (const address of addresses) {
 					const collections = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${address}/tokens?offset=0&limit=100`)
-					for (const collection of collections.data) 
-						options.push({'label': collection.collectionName, 'value': collection.collection})
+					for (const collection of collections.data) {
+						if(collection.collectionName && collection.collection)
+							options.push({'label': collection.collectionName, 'value': collection.collection})
+					}
 				}
 				if(options.length > 0) {
 					options = [...new Map(options.map(item => [item['value'], item])).values()]

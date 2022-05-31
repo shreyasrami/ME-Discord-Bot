@@ -23,7 +23,7 @@ module.exports = {
         if (interaction.isSelectMenu()) {
 
 			if (interaction.customId === 'select') {
-				await interaction.deferUpdate()
+				await interaction.deferReply({ ephemeral: true })
 				let projects = [...interaction.values]
 				let urls = projects.map(project => `https://api-mainnet.magiceden.dev/v2/collections/${project}/stats`)
 				let responses = []
@@ -44,31 +44,32 @@ module.exports = {
 						
 					}
 
-					stats = stats + `\nFloor Price: ${response.data['floorPrice']}`
-					stats = stats + `\nListed Count: ${response.data['listedCount']}`
-					stats = stats + `\nAverage Price: ${response.data['avgPrice24hr']}`
-					stats = stats + `\nTotal Volume: ${response.data['volumeAll']}`
+					stats = stats + `\n> Floor Price: ${response.data['floorPrice']}`
+					stats = stats + `\n> Listed Count: ${response.data['listedCount']}`
+					stats = stats + `\n> Average Price: ${response.data['avgPrice24hr']}`
+					stats = stats + `\n> Total Volume: ${response.data['volumeAll']}`
 
 					return stats
 				}
 
 				const modifiedResponses = responses.map(modifyResponses)
-	
-				for (let [index,response] of modifiedResponses.entries()) {
-					let embed = new MessageEmbed()
+
+				let all_details = ``
+				for (let [index,response] of modifiedResponses.entries()) 
+					all_details = all_details + `\n\n[**${projects[index]}**](https://magiceden.io/marketplace/${projects[index]})\n${response}\n\n`
+				
+
+				let embed = new MessageEmbed()
 						.setColor('#0099ff')
-						.setTitle(`${projects[index]}`)
-						.setDescription(response)
-						.setURL(`https://magiceden.io/marketplace/${projects[index]}`)
-					await interaction.channel.send({ ephemeral: true, embeds: [embed], components: [] });
-
-				}
-
+						.setDescription(all_details)
+					
+				await interaction.editReply({ ephemeral: true, embeds: [embed]});
+	
 			}
         }
 
 		if (interaction.isButton()) {
-			await interaction.deferUpdate()
+			await interaction.deferReply({ ephemeral: true })
 			const user = interaction.user.tag
 			let all_wallets = await Wallets.findOne({ user })
 			all_wallets = all_wallets.wallet_addresses
@@ -77,8 +78,10 @@ module.exports = {
 
 			for (const wallet of all_wallets) {
 				const collections = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${wallet}/tokens?offset=0&limit=100`)
-				for (const collection of collections.data) 
-					all_projects.push(collection.collection)	
+				for (const collection of collections.data) {
+					if(collection.collection)
+						all_projects.push(collection.collection)	
+				}
 			}
 			
 			all_projects = all_projects.filter((v, i, a) => a.indexOf(v) === i)
@@ -101,25 +104,27 @@ module.exports = {
 					
 				}
 
-				stats = stats + `\nFloor Price: ${response.data['floorPrice']}`
-				stats = stats + `\nListed Count: ${response.data['listedCount']}`
-				stats = stats + `\nAverage Price: ${response.data['avgPrice24hr']}`
-				stats = stats + `\nTotal Volume: ${response.data['volumeAll']}`
+				stats = stats + `\n> Floor Price: ${response.data['floorPrice']}`
+				stats = stats + `\n> Listed Count: ${response.data['listedCount']}`
+				stats = stats + `\n> Average Price: ${response.data['avgPrice24hr']}`
+				stats = stats + `\n> Total Volume: ${response.data['volumeAll']}`
 
 				return stats
 			}
 
 			const modifiedResponses = responses.map(modifyResponses)
 
-			for (let [index,response] of modifiedResponses.entries()) {
-				let embed = new MessageEmbed()
-					.setColor('#0099ff')
-					.setTitle(`${all_projects[index]}`)
-					.setDescription(response)
-					.setURL(`https://magiceden.io/marketplace/${all_projects[index]}`)
-				await interaction.channel.send({ ephemeral: true, embeds: [embed], components: [] });
-			}
+			let all_details = ``
+			for (let [index,response] of modifiedResponses.entries()) 
+				all_details = all_details + `\n\n[**${all_projects[index]}**](https://magiceden.io/marketplace/${all_projects[index]})\n${response}\n\n`
+			
 
+			let embed = new MessageEmbed()
+					.setColor('#0099ff')
+					.setDescription(all_details)
+				
+			await interaction.editReply({ ephemeral: true, embeds: [embed]});
+			
 		}
 
 		if (interaction.isAutocomplete()) {
@@ -128,13 +133,17 @@ module.exports = {
 			if (interaction.commandName === "remove") {
 				const user = interaction.user.tag
 				let all_wallets = await Wallets.findOne({ user })
-				all_wallets = all_wallets.wallet_addresses
-				for (const wallet of all_wallets) 
-					choices.push({'name': wallet, 'value': wallet})
+				if(all_wallets){
+					all_wallets = all_wallets.wallet_addresses
+					for (const wallet of all_wallets) 
+						choices.push({'name': wallet, 'value': wallet})
 				
+					interaction.respond(choices);
+				
+				}
+				else
+					interaction.respond([{'name': 'None','value': 'None'}])
 			}
-
-			interaction.respond(choices);
 
 		}
 

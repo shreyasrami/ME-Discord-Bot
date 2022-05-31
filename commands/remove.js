@@ -16,7 +16,7 @@ module.exports = {
         const remove_address = interaction.options.getString('address')
         const userExist = await Wallets.findOne({ user });
     
-        if (userExist) {
+        if (userExist && remove_address !== 'None') {
 			let addresses = userExist.wallet_addresses
 			const index = addresses.findIndex(wallet_address => wallet_address === remove_address)
 			if (index === -1)
@@ -24,12 +24,12 @@ module.exports = {
 			
 			addresses.splice(index,1)
             await userExist.updateOne({wallet_addresses: addresses})
+
+			await interaction.reply(`Successfully removed Wallet Address: \`${remove_address}\` for ${user}`);
+
         } else {
         	await interaction.reply(`${user} has no wallets added yet, please add a wallet address first.`);
         }
-		
-		await interaction.reply(`Successfully removed Wallet Address: \`${remove_address}\` for ${user}`);
-		
-
+			
 	},
 };
