@@ -14,7 +14,7 @@ module.exports = {
                         .setTitle(`Commands`)
                         .setDescription(commands)                        
 				
-		await interaction.reply({ embeds: [embed] });
+		await interaction.reply({ embeds: [embed] , ephemeral: true });
 
 	},
 };

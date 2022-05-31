@@ -50,7 +50,7 @@ module.exports = {
 					await interaction.editReply({ ephemeral: true, embeds: [embed], components: [row1,row2] });
 				}
 				else
-					await interaction.editReply(`There are no nfts in the wallets added for ${user}`);
+					await interaction.editReply({ content: `There are no nfts in the wallets added for ${user}`, ephemeral: true });
 
 
 			} catch (err) {
@@ -58,7 +58,7 @@ module.exports = {
 			}
 		}
 		else
-			await interaction.editReply(`There are no wallets added for ${user} yet, Please add new wallet address to get the details`);
+			await interaction.editReply({ content: `There are no wallets added for ${user} yet, Please add new wallet address to get the details`, ephemeral: true });
           
 	},
 };

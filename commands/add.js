@@ -23,7 +23,7 @@ module.exports = {
 			    await userExist.updateOne({wallet_addresses: userExist.wallet_addresses})
             }
             else
-        		await interaction.reply(`Wallet Address: \`${new_address}\` already exists for ${user}`)
+        		await interaction.reply({ content: `Wallet Address: \`${new_address}\` already exists for ${user}`, ephemeral: true })
         } else {
             await Wallets.create({
                 user,
@@ -31,7 +31,7 @@ module.exports = {
             });
         }
         
-        await interaction.reply(`Successfully added new Wallet Address: \`${new_address}\` for ${user}`);
+        await interaction.reply({ content: `Successfully added new Wallet Address: \`${new_address}\` for ${user}`, ephemeral: true });
 
     
 	},

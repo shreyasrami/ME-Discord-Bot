@@ -20,15 +20,15 @@ module.exports = {
 			let addresses = userExist.wallet_addresses
 			const index = addresses.findIndex(wallet_address => wallet_address === remove_address)
 			if (index === -1)
-        		await interaction.reply(`Wallet Address: \`${remove_address}\` does not exist in My Collections for ${user}`)
+        		await interaction.reply({content: `Wallet Address: \`${remove_address}\` does not exist in My Collections for ${user}`, ephemeral: true })
 			
 			addresses.splice(index,1)
             await userExist.updateOne({wallet_addresses: addresses})
 
-			await interaction.reply(`Successfully removed Wallet Address: \`${remove_address}\` for ${user}`);
+			await interaction.reply({ content: `Successfully removed Wallet Address: \`${remove_address}\` for ${user}`, ephemeral: true });
 
         } else {
-        	await interaction.reply(`${user} has no wallets added yet, please add a wallet address first.`);
+        	await interaction.reply({content: `${user} has no wallets added yet, please add a wallet address first.`, ephemeral: true });
         }
 			
 	},
