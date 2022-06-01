@@ -8,7 +8,8 @@ module.exports = {
 		.setDescription('Add a new NFT name')
         .addStringOption(option =>
             option.setName('nft')
-                .setDescription('NFT name to be added')),
+                .setDescription('NFT name to be added')
+                .setRequired(true)),
                 
 	async execute(interaction) {
         const user = interaction.user.tag

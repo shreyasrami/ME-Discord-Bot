@@ -8,7 +8,8 @@ module.exports = {
 		.setDescription('Add a new Wallet Address')
         .addStringOption(option =>
             option.setName('address')
-                .setDescription('Wallet Address to be added')),
+                .setDescription('Wallet Address to be added')
+                .setRequired(true)),
                 
 	async execute(interaction) {
         const user = interaction.user.tag
