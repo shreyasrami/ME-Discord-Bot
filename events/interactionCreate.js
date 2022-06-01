@@ -71,27 +71,34 @@ module.exports = {
         }
 
 		if (interaction.isButton()) {
-			if (interaction.customId === 'all') {
+			if (interaction.customId === 'wallet_nfts_all' || interaction.customId === 'my_nfts_all') {
 				await interaction.deferReply({ ephemeral: true })
 				const user = interaction.user.tag
-				let all_wallets = await Wallets.findOne({ user })
-				all_wallets = all_wallets.wallet_addresses
 				let all_projects = []
 				let responses = []
 
-				for (const wallet of all_wallets) {
-					const collections = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${wallet}/tokens?offset=0&limit=100`)
-					for (const collection of collections.data) {
-						if(collection.collection)
-							all_projects.push(collection.collection)	
+				if(interaction.customId === 'wallet_nfts_all') {
+					let all_wallets = await Wallets.findOne({ user })
+					all_wallets = all_wallets.wallet_addresses
+					for (const wallet of all_wallets) {
+						const collections = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${wallet}/tokens?offset=0&limit=100`)
+						for (const collection of collections.data) {
+							if(collection.collection)
+								all_projects.push(collection.collection)	
+						}
 					}
+					
+					all_projects = all_projects.filter((v, i, a) => a.indexOf(v) === i)
 				}
-				
-				all_projects = all_projects.filter((v, i, a) => a.indexOf(v) === i)
+				else {
+					all_projects = await Projects.findOne({ user })
+					all_projects = all_projects.user_projects
+				}
+
+				console.log(all_projects)
 
 				for(const project of all_projects) 
 					responses.push(await axios.get(`https://api-mainnet.magiceden.dev/v2/collections/${project}/stats`))
-
 				
 				
 				let convertToSol = 0.000000001
@@ -120,7 +127,6 @@ module.exports = {
 				let all_details = ``
 				for (let [index,response] of modifiedResponses.entries()) 
 					all_details = all_details + `\n**[${all_projects[index]}](https://magiceden.io/marketplace/${all_projects[index]})**\n${response}\n\n\n`
-				
 
 				let embed = new MessageEmbed()
 						.setColor('#0099ff')
@@ -157,7 +163,7 @@ module.exports = {
 							const row2 = new MessageActionRow()
 								.addComponents(
 									new MessageButton()
-										.setCustomId('all')
+										.setCustomId('wallet_nfts_all')
 										.setLabel('All')
 										.setStyle('SUCCESS'),
 								);
@@ -206,7 +212,7 @@ module.exports = {
 						const row2 = new MessageActionRow()
 							.addComponents(
 								new MessageButton()
-									.setCustomId('all')
+									.setCustomId('my_nfts_all')
 									.setLabel('All')
 									.setStyle('SUCCESS'),
 							);
