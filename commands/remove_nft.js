@@ -27,7 +27,7 @@ module.exports = {
 			nfts.splice(index,1)
 			await userExist.updateOne({user_projects: nfts})
 
-			await interaction.reply({ content: `Successfully removed NFT: \`${remove_address}\` for ${user}`, ephemeral: true });
+			await interaction.reply({ content: `Successfully removed NFT: \`${remove_nft}\` for ${user}`, ephemeral: true });
 
 		} 
 		else 
