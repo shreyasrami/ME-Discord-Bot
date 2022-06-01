@@ -1,7 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageButton } = require('discord.js');
 const axios = require('axios');
-const Wallets = require('../db-schema');
+const Wallets = require('../db-schema/wallets');
+const Projects = require('../db-schema/projects');
 
 
 module.exports = {
@@ -9,56 +10,23 @@ module.exports = {
 		.setName('details')
 		.setDescription('Gives options for NFT details'),
 	async execute(interaction) {
-		await interaction.deferReply({ ephemeral: true });
-		const user = interaction.user.tag
-        const userExist = await Wallets.findOne({ user });
-		if (userExist && userExist.wallet_addresses.length > 0) {
-			try {
-				let options = []
-				let addresses = userExist.wallet_addresses
-				for (const address of addresses) {
-					const collections = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${address}/tokens?offset=0&limit=100`)
-					for (const collection of collections.data) {
-						if(collection.collectionName && collection.collection)
-							options.push({'label': collection.collectionName, 'value': collection.collection})
-					}
-				}
-				if(options.length > 0) {
-					options = [...new Map(options.map(item => [item['value'], item])).values()]
-					const row1 = new MessageActionRow()
-					.addComponents(
-						new MessageSelectMenu()
-							.setCustomId('select')
-							.setPlaceholder('Select NFTs')
-							.setMinValues(1)
-							.addOptions(options),
-					);
-					const row2 = new MessageActionRow()
+		const row = new MessageActionRow()
 						.addComponents(
 							new MessageButton()
-								.setCustomId('all')
-								.setLabel('All')
+								.setCustomId('my_nfts')
+								.setLabel('Added NFTs')
+								.setStyle('PRIMARY'),
+							new MessageButton()
+								.setCustomId('wallet_nfts')
+								.setLabel('Wallet NFTs')
 								.setStyle('SUCCESS'),
+							
 						);
-
-					const embed = new MessageEmbed()
-						.setColor('#0099ff')
-						.setTitle(`Magic Eden Stats`)
-						.setDescription(`Select an option to fetch the stats of your NFT collections from Magic Eden`)
-						.setURL(`https://magiceden.io/marketplace/`)
+		
+		const embed = new MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle(`Select a type`)
 						
-					await interaction.editReply({ ephemeral: true, embeds: [embed], components: [row1,row2] });
-				}
-				else
-					await interaction.editReply({ content: `There are no nfts in the wallets added for ${user}`, ephemeral: true });
-
-
-			} catch (err) {
-				console.error(err);
-			}
-		}
-		else
-			await interaction.editReply({ content: `There are no wallets added for ${user} yet, Please add new wallet address to get the details`, ephemeral: true });
-          
+		await interaction.reply({ ephemeral: true, embeds: [embed], components: [row] });
 	},
 };
